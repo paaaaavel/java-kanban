@@ -48,20 +48,16 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(name, task.name) && Objects.equals(description, task.description) && status == task.status;
-    }
-
-    @Override
-    public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
+        return id == task.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, status);
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" + "id=" + id + ", name='" + name + '\'' + ", description='" + description + '\'' + '}';
     }
 }
