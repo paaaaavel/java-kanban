@@ -93,4 +93,55 @@ class InMemoryTaskManagerTest {
         Task fromHistory = history.get(history.size() - 1);
         assertEquals("Updated name", fromHistory.getName(), "История должна содержать актуальную версию задачи");
     }
+    @Test
+    void shouldDeleteAllTasks() {
+        taskManager.createTask("Task1", "Desc", Status.NEW);
+        taskManager.createTask("Task2", "Desc", Status.NEW);
+
+        taskManager.deleteAllTasks();
+
+        assertTrue(taskManager.getAllTasks().isEmpty(), "Все задачи должны быть удалены");
+    }
+
+    @Test
+    void shouldDeleteAllEpicsAndTheirSubtasks() {
+        Epic epic = taskManager.createEpic("Epic", "Desc");
+        taskManager.createSubtask("Sub", "Desc", Status.NEW, epic.getID());
+
+        taskManager.deleteAllEpics();
+
+        assertTrue(taskManager.getAllEpics().isEmpty(), "Все эпики должны быть удалены");
+        assertTrue(taskManager.getAllSubtasks().isEmpty(), "Все подзадачи должны быть удалены");
+    }
+
+    @Test
+    void shouldUpdateEpic() {
+        Epic epic = taskManager.createEpic("Epic1", "Desc");
+        epic.setDescription("Updated Desc");
+        taskManager.updateEpic(epic);
+
+        Epic updated = taskManager.getEpicById(epic.getID());
+        assertEquals("Updated Desc", updated.getDescription(), "Описание эпика должно обновиться");
+    }
+
+    @Test
+    void shouldUpdateSubtask() {
+        Epic epic = taskManager.createEpic("Epic1", "Desc");
+        Subtask subtask = taskManager.createSubtask("Sub1", "Desc", Status.NEW, epic.getID());
+        subtask.setName("Updated Sub");
+        taskManager.updateSubtask(subtask);
+
+        Subtask updated = taskManager.getSubtaskById(subtask.getID());
+        assertEquals("Updated Sub", updated.getName(), "Имя подзадачи должно обновиться");
+    }
+
+    @Test
+    void historyShouldBeEmptyAfterDeletingAllTasks() {
+        Task task = taskManager.createTask("Task1", "Desc", Status.NEW);
+        taskManager.getTaskById(task.getID());
+        assertFalse(taskManager.getHistory().isEmpty(), "История должна быть не пуста");
+
+        taskManager.deleteAllTasks();
+        assertTrue(taskManager.getHistory().isEmpty(), "История должна быть пуста после удаления всех задач");
+    }
 }
