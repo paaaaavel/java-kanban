@@ -1,16 +1,17 @@
 package tasktracker.main;
 
+import tasktracker.manager.Managers;
+import tasktracker.manager.TaskManager;
 import tasktracker.model.Epic;
 import tasktracker.model.Status;
 import tasktracker.model.Subtask;
 import tasktracker.model.Task;
-import tasktracker.manager.TaskManager;
+
 
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
-
+        TaskManager manager = Managers.getDefault();
         // Создаём обычные задачи
         Task task1 = manager.createTask("Полить цветы", "Набрать воды в кувшин и полить цветы", Status.NEW);
         Task task2 = manager.createTask("Сделать коммит проекта", "Прописать коммит проекта в консоли и запушить", Status.NEW);
