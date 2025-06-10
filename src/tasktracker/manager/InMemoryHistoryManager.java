@@ -17,7 +17,10 @@ public class InMemoryHistoryManager implements HistoryManager {
             history.remove(0);
         }
     }
-
+    @Override
+    public void clearHistory() {
+        history.clear();
+    }
     @Override
     public List<Task> getHistory() {
         return history;
