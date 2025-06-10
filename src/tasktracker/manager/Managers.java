@@ -1,4 +1,4 @@
 package tasktracker.manager;
 
-public interface TaskManager {
+public class Managers {
 }
