@@ -8,22 +8,29 @@ import tasktracker.model.Subtask;
 import tasktracker.model.Task;
 
 
-public class Main {
+public class Main
+{
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         TaskManager manager = Managers.getDefault();
         // Создаём обычные задачи
-        Task task1 = manager.createTask("Полить цветы", "Набрать воды в кувшин и полить цветы", Status.NEW);
-        Task task2 = manager.createTask("Сделать коммит проекта", "Прописать коммит проекта в консоли и запушить", Status.NEW);
+        Task task1 = manager.createTask("Полить цветы", "Набрать воды в кувшин и полить цветы",
+                Status.NEW);
+        Task task2 = manager.createTask("Сделать коммит проекта",
+                "Прописать коммит проекта в консоли и запушить", Status.NEW);
 
         // Создаём эпики
         Epic epic1 = manager.createEpic("Купить квартиру", "Подготовка к переезду");
         Epic epic2 = manager.createEpic("Закончить курс Java-Developer", "Получить диплом");
 
         // Создаём подзадачи для эпиков
-        Subtask subtask1 = manager.createSubtask("Выбрать район", "Рассмотреть районы для покупки", Status.NEW, epic1.getID());
-        Subtask subtask2 = manager.createSubtask("Нанять риэлтора", "Рассмотреть варианты которые предлагает риэлтор", Status.NEW, epic1.getID());
-        Subtask subtask3 = manager.createSubtask("Сдать итоговый проект", "Завершить проект и отправить на проверку", Status.NEW, epic2.getID());
+        Subtask subtask1 = manager.createSubtask("Выбрать район",
+                "Рассмотреть районы для покупки", Status.NEW, epic1.getID());
+        Subtask subtask2 = manager.createSubtask("Нанять риэлтора",
+                "Рассмотреть варианты которые предлагает риэлтор", Status.NEW, epic1.getID());
+        Subtask subtask3 = manager.createSubtask("Сдать итоговый проект",
+                "Завершить проект и отправить на проверку", Status.NEW, epic2.getID());
 
         // Выводим все задачи, эпики и подзадачи
         System.out.println("Все задачи:");

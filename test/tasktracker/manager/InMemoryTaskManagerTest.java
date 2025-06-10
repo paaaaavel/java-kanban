@@ -8,24 +8,29 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest {
+class InMemoryTaskManagerTest
+{
     private TaskManager taskManager;
 
     @BeforeEach
-    void setUp() {
+    void setUp()
+    {
         taskManager = Managers.getDefault();
     }
 
     @Test
-    void shouldCreateTask() {
+    void shouldCreateTask()
+    {
         Task task = taskManager.createTask("Test task", "Test description", Status.NEW);
         assertNotNull(task, "Задача не создана");
         assertEquals(task, taskManager.getTaskById(task.getID()), "Созданная задача не совпадает");
     }
 
     @Test
-    void shouldReturnLastTenViewedTasksInHistory() {
-        for (int i = 0; i < 12; i++) {
+    void shouldReturnLastTenViewedTasksInHistory()
+    {
+        for (int i = 0; i < 12; i++)
+        {
             Task task = taskManager.createTask("Task " + i, "Desc", Status.NEW);
             taskManager.getTaskById(task.getID());
         }
@@ -35,8 +40,10 @@ class InMemoryTaskManagerTest {
         assertEquals("Task 2", history.get(0).getName(), "Первым должен быть Task 2");
         assertEquals("Task 11", history.get(9).getName(), "Последним должен быть Task 11");
     }
+
     @Test
-    void shouldTasksBeEqualIfIdsMatch() {
+    void shouldTasksBeEqualIfIdsMatch()
+    {
         Task task1 = new Task(1, "Task1", "Desc", Status.NEW);
         Task task2 = new Task(1, "Task2", "Other desc", Status.IN_PROGRESS);
         assertEquals(task1, task2, "Задачи с одинаковым id должны быть равны");
@@ -49,16 +56,20 @@ class InMemoryTaskManagerTest {
         Subtask subtask2 = new Subtask(1, "Sub2", "Other desc", Status.IN_PROGRESS, 20);
         assertEquals(subtask1, subtask2, "Подзадачи с одинаковым id должны быть равны");
     }
+
     @Test
-    void shouldReturnInitializedManagers() {
+    void shouldReturnInitializedManagers()
+    {
         TaskManager manager = Managers.getDefault();
         assertNotNull(manager, "Должен возвращаться проинициализированный менеджер");
 
         HistoryManager historyManager = Managers.getDefaultHistory();
         assertNotNull(historyManager, "Должен возвращаться проинициализированный HistoryManager");
     }
+
     @Test
-    void shouldCreateAndGetEpic() {
+    void shouldCreateAndGetEpic()
+    {
         Epic epic = taskManager.createEpic("Epic 1", "Epic description");
         assertNotNull(epic, "Эпик не создан");
         Epic retrievedEpic = taskManager.getEpicById(epic.getID());
@@ -66,22 +77,28 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void shouldCreateAndGetSubtask() {
+    void shouldCreateAndGetSubtask()
+    {
         Epic epic = taskManager.createEpic("Epic 1", "Epic description");
-        Subtask subtask = taskManager.createSubtask("Subtask 1", "Subtask description", Status.NEW, epic.getID());
+        Subtask subtask = taskManager.createSubtask("Subtask 1", "Subtask description", Status.NEW,
+                epic.getID());
         assertNotNull(subtask, "Подзадача не создана");
         Subtask retrievedSubtask = taskManager.getSubtaskById(subtask.getID());
         assertEquals(subtask, retrievedSubtask, "Подзадача не найдена по id");
     }
+
     @Test
-    void shouldDeleteTaskById() {
+    void shouldDeleteTaskById()
+    {
         Task task = taskManager.createTask("Task 1", "Desc", Status.NEW);
         int id = task.getID();
         taskManager.deleteTaskById(id);
         assertNull(taskManager.getTaskById(id), "Задача должна быть удалена");
     }
+
     @Test
-    void shouldKeepActualVersionInHistory() {
+    void shouldKeepActualVersionInHistory()
+    {
         Task task = taskManager.createTask("Task 1", "Desc", Status.NEW);
         taskManager.getTaskById(task.getID()); // В историю
 
@@ -91,10 +108,13 @@ class InMemoryTaskManagerTest {
 
         List<Task> history = taskManager.getHistory();
         Task fromHistory = history.get(history.size() - 1);
-        assertEquals("Updated name", fromHistory.getName(), "История должна содержать актуальную версию задачи");
+        assertEquals("Updated name", fromHistory.getName(),
+                "История должна содержать актуальную версию задачи");
     }
+
     @Test
-    void shouldDeleteAllTasks() {
+    void shouldDeleteAllTasks()
+    {
         taskManager.createTask("Task1", "Desc", Status.NEW);
         taskManager.createTask("Task2", "Desc", Status.NEW);
 
@@ -104,7 +124,8 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void shouldDeleteAllEpicsAndTheirSubtasks() {
+    void shouldDeleteAllEpicsAndTheirSubtasks()
+    {
         Epic epic = taskManager.createEpic("Epic", "Desc");
         taskManager.createSubtask("Sub", "Desc", Status.NEW, epic.getID());
 
@@ -115,7 +136,8 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void shouldUpdateEpic() {
+    void shouldUpdateEpic()
+    {
         Epic epic = taskManager.createEpic("Epic1", "Desc");
         epic.setDescription("Updated Desc");
         taskManager.updateEpic(epic);
@@ -125,7 +147,8 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void shouldUpdateSubtask() {
+    void shouldUpdateSubtask()
+    {
         Epic epic = taskManager.createEpic("Epic1", "Desc");
         Subtask subtask = taskManager.createSubtask("Sub1", "Desc", Status.NEW, epic.getID());
         subtask.setName("Updated Sub");
@@ -136,7 +159,8 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void historyShouldBeEmptyAfterDeletingAllTasks() {
+    void historyShouldBeEmptyAfterDeletingAllTasks()
+    {
         Task task = taskManager.createTask("Task1", "Desc", Status.NEW);
         taskManager.getTaskById(task.getID());
         assertFalse(taskManager.getHistory().isEmpty(), "История должна быть не пуста");

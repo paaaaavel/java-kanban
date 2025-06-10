@@ -58,7 +58,8 @@ public class InMemoryTaskManager implements TaskManager
         }
 
         // Проверка: подзадача не может ссылаться на себя как на эпик
-        if (epicId == currentId + 1) {
+        if (epicId == currentId + 1)
+        {
             System.out.println("Ошибка: Подзадача не может ссылаться на себя как на эпик.");
             return null;
         }
@@ -88,18 +89,21 @@ public class InMemoryTaskManager implements TaskManager
         return new ArrayList<>(subtasks.values());
     }
 
-    public void deleteAllTasks() {
+    public void deleteAllTasks()
+    {
         tasks.clear();
         historyManager.clearHistory();
     }
 
-    public void deleteAllEpics() {
+    public void deleteAllEpics()
+    {
         deleteAllSubtasks();
         epics.clear();
         historyManager.clearHistory();
     }
 
-    public void deleteAllSubtasks() {
+    public void deleteAllSubtasks()
+    {
         subtasks.clear();
         historyManager.clearHistory();
     }
