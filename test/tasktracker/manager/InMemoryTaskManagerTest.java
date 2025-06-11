@@ -168,9 +168,11 @@ class InMemoryTaskManagerTest
         taskManager.deleteAllTasks();
         assertTrue(taskManager.getHistory().isEmpty(), "История должна быть пуста после удаления всех задач");
     }
+
     // Проверка удаления всех подзадач
     @Test
-    void shouldDeleteAllSubtasks() {
+    void shouldDeleteAllSubtasks()
+    {
         Epic epic = taskManager.createEpic("Epic1", "Desc");
         taskManager.createSubtask("Sub1", "Desc", Status.NEW, epic.getID());
         taskManager.createSubtask("Sub2", "Desc", Status.NEW, epic.getID());
@@ -184,7 +186,8 @@ class InMemoryTaskManagerTest
 
     // Проверка удаления подзадачи по id
     @Test
-    void shouldDeleteSubtaskById() {
+    void shouldDeleteSubtaskById()
+    {
         Epic epic = taskManager.createEpic("Epic1", "Desc");
         Subtask subtask = taskManager.createSubtask("Sub1", "Desc", Status.NEW, epic.getID());
         int subtaskId = subtask.getID();
@@ -198,7 +201,8 @@ class InMemoryTaskManagerTest
 
     // Проверка getAllTasks / getAllEpics / getAllSubtasks
     @Test
-    void shouldReturnAllTasksEpicsSubtasks() {
+    void shouldReturnAllTasksEpicsSubtasks()
+    {
         Task task = taskManager.createTask("Task1", "Desc", Status.NEW);
         Epic epic = taskManager.createEpic("Epic1", "Desc");
         Subtask subtask = taskManager.createSubtask("Sub1", "Desc", Status.NEW, epic.getID());
@@ -212,7 +216,8 @@ class InMemoryTaskManagerTest
 
     // Проверка того, что задачи с одинаковым id не конфликтуют
     @Test
-    void shouldNotConflictIfSameIdCreatedManually() {
+    void shouldNotConflictIfSameIdCreatedManually()
+    {
         Task task1 = new Task(1, "Task1", "Desc", Status.NEW);
         Task task2 = new Task(1, "Task2", "Other Desc", Status.DONE);
         assertEquals(task1, task2, "Задачи с одинаковым id должны быть равны (по equals)");
@@ -220,14 +225,17 @@ class InMemoryTaskManagerTest
 
     // Проверка, что Epic не может содержать самого себя в subtaskIds
     @Test
-    void shouldNotAllowEpicToContainItself() {
+    void shouldNotAllowEpicToContainItself()
+    {
         Epic epic = taskManager.createEpic("Epic1", "Desc");
         epic.addSubtaskId(epic.getID());
 
         assertFalse(epic.getSubtaskIds().contains(epic.getID()), "Эпик не должен содержать сам себя в списке подзадач");
     }
+
     @Test
-    void shouldAddAndRemoveSubtaskIdInEpic() {
+    void shouldAddAndRemoveSubtaskIdInEpic()
+    {
         Epic epic = new Epic(1, "Epic1", "Description", Status.NEW);
         assertTrue(epic.getSubtaskIds().isEmpty(), "Список подзадач должен быть пустым");
 
@@ -238,13 +246,17 @@ class InMemoryTaskManagerTest
         epic.removeSubtaskId(42);
         assertTrue(epic.getSubtaskIds().isEmpty(), "Список должен снова стать пустым");
     }
+
     @Test
-    void shouldReturnCorrectEpicId() {
+    void shouldReturnCorrectEpicId()
+    {
         Subtask subtask = new Subtask(1, "Subtask1", "Desc", Status.NEW, 99);
         assertEquals(99, subtask.getEpicId(), "EpicId должен быть равен 99");
     }
+
     @Test
-    void shouldUpdateTaskFields() {
+    void shouldUpdateTaskFields()
+    {
         Task task = new Task(1, "Old Name", "Old Desc", Status.NEW);
 
         task.setName("New Name");
@@ -255,8 +267,10 @@ class InMemoryTaskManagerTest
         assertEquals("New Desc", task.getDescription());
         assertEquals(Status.DONE, task.getStatus());
     }
+
     @Test
-    void shouldUpdateEpicStatusAccordingToSubtasks() {
+    void shouldUpdateEpicStatusAccordingToSubtasks()
+    {
         Epic epic = taskManager.createEpic("Epic1", "Desc");
         Subtask sub1 = taskManager.createSubtask("Sub1", "Desc", Status.NEW, epic.getID());
         Subtask sub2 = taskManager.createSubtask("Sub2", "Desc", Status.NEW, epic.getID());
@@ -272,8 +286,10 @@ class InMemoryTaskManagerTest
         taskManager.updateSubtask(sub2);
         assertEquals(Status.DONE, taskManager.getEpicById(epic.getID()).getStatus(), "Epic должен быть DONE");
     }
+
     @Test
-    void shouldUpdateTaskFieldsCorrectly() {
+    void shouldUpdateTaskFieldsCorrectly()
+    {
         Task task = new Task(1, "name", "desc", Status.NEW);
         task.setName("new name");
         assertEquals("new name", task.getName());
@@ -286,13 +302,16 @@ class InMemoryTaskManagerTest
     }
 
     @Test
-    void shouldReturnCorrectToString() {
+    void shouldReturnCorrectToString()
+    {
         Task task = new Task(1, "name", "desc", Status.NEW);
         String expected = "Task{id=1, name='name', description='desc'}";
         assertEquals(expected, task.toString());
     }
+
     @Test
-    void shouldReturnCorrectToStringForEpic() {
+    void shouldReturnCorrectToStringForEpic()
+    {
         Epic epic = new Epic(1, "Epic1", "Epic desc", Status.NEW);
         epic.addSubtaskId(42);
         String expected = "Epic{id=1, name='Epic1', description='Epic desc', status=NEW, subtaskIds=[42]}";
@@ -300,20 +319,23 @@ class InMemoryTaskManagerTest
     }
 
     @Test
-    void shouldReturnCorrectToStringForSubtask() {
+    void shouldReturnCorrectToStringForSubtask()
+    {
         Subtask subtask = new Subtask(1, "Sub1", "Desc", Status.IN_PROGRESS, 99);
         String expected = "Subtask{id=1, name='Sub1', description='Desc', status=IN_PROGRESS, epicId=99}";
         assertEquals(expected, subtask.toString(), "Метод toString должен возвращать корректную строку");
     }
 
     @Test
-    void shouldReturnSubtaskEpicId() {
+    void shouldReturnSubtaskEpicId()
+    {
         Subtask subtask = new Subtask(1, "Sub1", "Desc", Status.NEW, 42);
         assertEquals(42, subtask.getEpicId(), "Метод getEpicId должен возвращать корректный ID эпика");
     }
 
     @Test
-    void shouldGetSubtaskIdsFromEpic() {
+    void shouldGetSubtaskIdsFromEpic()
+    {
         Epic epic = new Epic(1, "Epic1", "Desc", Status.NEW);
         assertTrue(epic.getSubtaskIds().isEmpty(), "Список подзадач должен быть пустым");
 
@@ -322,8 +344,10 @@ class InMemoryTaskManagerTest
         assertEquals(1, ids.size(), "Список подзадач должен содержать 1 элемент");
         assertEquals(42, ids.get(0), "ID подзадачи должен быть 42");
     }
+
     @Test
-    void shouldReturnSameHashCodeForSameId() {
+    void shouldReturnSameHashCodeForSameId()
+    {
         Task task1 = new Task(1, "Task1", "Desc", Status.NEW);
         Task task2 = new Task(1, "Task2", "Other Desc", Status.IN_PROGRESS);
 
@@ -331,7 +355,8 @@ class InMemoryTaskManagerTest
     }
 
     @Test
-    void shouldDeleteAllEpics() {
+    void shouldDeleteAllEpics()
+    {
         Epic epic = taskManager.createEpic("Epic", "Desc");
         taskManager.createSubtask("Subtask", "Desc", Status.NEW, epic.getID());
         taskManager.deleteAllEpics();
@@ -340,7 +365,8 @@ class InMemoryTaskManagerTest
     }
 
     @Test
-    void shouldUpdateTask() {
+    void shouldUpdateTask()
+    {
         Task task = taskManager.createTask("Task", "Desc", Status.NEW);
         task.setName("Updated");
         taskManager.updateTask(task);
